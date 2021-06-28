@@ -11,13 +11,9 @@
 <body>
   <section id="app">
     <x-top-nav></x-top-nav>
-    <main class="px-5 md:px-10 pt-5 max-w-screen-2xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-3 overflow-hidden">
-      <div class="lg:col-span-3 px-2">
-          @section('sidebar')
-            <x-side-nav></x-side-nav>     
-          @show
-      </div>
-      <div class="lg:col-span-9">
+    <main class="px-5 md:px-10 pt-5 max-w-screen-2xl mx-auto">
+      
+      <div>
         @yield('content')
       </div>
     </main>

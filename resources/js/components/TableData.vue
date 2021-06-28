@@ -1,8 +1,8 @@
 <template>
   <main>
-    <div class="flex flex-col">
-        <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8 px-2">
-          <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+    <div class="flex space-x-2">
+        <section class="overflow-x-auto w-auto">
+          <div class="p-2 align-middle inline-block min-w-full">
             <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
               <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
@@ -25,11 +25,11 @@
                     <td class="p-4">
                       <section class="flex flex-col space-y-1 lg:flex-row lg:space-y-0 lg:space-x-1">
                         <!-- View -->
-                        <div class="bg-blue-500 hover:bg-blue-600 active:bg-blue-500 text-white hover:shadow-sm transition-all rounded-lg cursor-pointer h-8 w-8 flex opacity-80">
+                        <div class="bg-blue-500 hover:bg-blue-600 active:bg-blue-500 text-white hover:shadow-sm transition-all rounded-lg cursor-pointer h-8 w-8 flex opacity-80" @click="deleteEvent('warning')">
                           <ion-icon class="table m-auto" name="eye" v-pre></ion-icon>
                         </div>
                         <!-- Edit -->
-                        <div class="bg-green-500 hover:bg-green-600 active:bg-green-500 text-white hover:shadow-sm transition-all rounded-lg cursor-pointer h-8 w-8 flex opacity-80" @click="deleteEvent(index)">
+                        <div class="bg-green-500 hover:bg-green-600 active:bg-green-500 text-white hover:shadow-sm transition-all rounded-lg cursor-pointer h-8 w-8 flex opacity-80" @click="deleteEvent('success')">
                           <ion-icon class="table m-auto" name="create" v-pre></ion-icon>
                         </div>
                         <!-- Delete -->
@@ -43,15 +43,19 @@
               </table>
             </div>
           </div>
-        </div>
-    </div>
+        </section>
 
-    <alert-modal :title="warnDeleteData.title"
+        <!-- Side Pop Up -->
+        <section class="bg-green-100 w-3/4 table">
+            test
+        </section>
+    </div>
+    
+</main>
+<alert-modal :title="warnDeleteData.title"
             :body="warnDeleteData.body"  :okButton="warnDeleteData.okButton" ref="warnDelete" :iconName="warnDeleteData.iconName" :alertColor="warnDeleteData.alertColor" :okButtonColor="warnDeleteData.okButtonColor"></alert-modal>
 
-    <notification ref="toastNotification"></notification>
-
-</main>
+<notification ref="toastNotification"></notification>
 </template>
 
 <script>
@@ -87,20 +91,13 @@ export default {
       const dateColumns = ['updated_at','created_at'];
       var isDate = dateColumns.includes(column) && row !== null;
       if(isDate){
-        let d = new Date(row);
-        let year = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d);
-        let month = new Intl.DateTimeFormat('en', { month: 'short' }).format(d);
-        let day = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d);
-        let hour = d.getHours();
-        let minute = d.getMinutes();
-        
-
-        return `${month}-${day}-${year} ${hour}:${minute}`;
+        let date = new Date(row);
+        return new Intl.DateTimeFormat('en-US', { dateStyle: 'full', timeStyle: 'long' }).format(date);
       }
       return row;
     },
-    deleteEvent(index){
-      this.rows.splice(index, 1);
+    deleteEvent(type){
+      this.$refs.toastNotification.startToast(type,"testttt tetetet ge ge gege");
     },
     warnDelete(toDeleteItemId,toDeleteItemName, toDeleteIndex){
       if(toDeleteItemName)this.warnDeleteData.title = "Are you sure you want to delete: " + toDeleteItemName;
@@ -110,7 +107,7 @@ export default {
             // handle success
             var status = response.data.status;
             var message = response.data.message;
-            this.$refs.toastNotification.startToast(true,status,message);
+            this.$refs.toastNotification.startToast(status,message);
             this.rows.splice(toDeleteIndex, 1);
           })
           .catch(function (error) {
