@@ -12,9 +12,7 @@
         <!-- Styles -->
     </head>
     <body class="antialiased">
-        <div id="app">
-            <alert-modal></alert-modal>
-        </div>
+        home
         <script src="{{ asset('js/app.js') }}"> </script>
     </body>
 </html>

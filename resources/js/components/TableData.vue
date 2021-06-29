@@ -1,27 +1,22 @@
 <template>
   <main>
-    <div class="flex space-x-2">
-        <section class="overflow-x-auto w-auto">
-          <div class="p-2 align-middle inline-block min-w-full">
-            <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+    <div class="grid grid-cols-12 gap-3">
+        <section class="col-span-9 overflow-x-auto">
+          <div class="align-middle inline-block min-w-full">
+            <div class="shadow overflow-hidden border-b border-gray-200 rounded-lg">
               <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                   <tr>
-                    <th v-for="(attribute,index) in attributes" :key="index" scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    {{attribute}}
-                    </th>
                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       actions
+                    </th>
+                    <th v-for="(attribute,index) in attributes" :key="index" scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    {{attribute}}
                     </th>
                   </tr>
                 </thead>
                 <transition-group tag="tbody" name="slide-up" class="bg-white divide-y divide-gray-200">
                   <tr v-for="(row, index) in rows" :key="row.id" class="whitespace-nowrap hover:bg-gray-100" >
-                    <td v-for="(attribute,index) in attributes" :key="index" class="p-4"> 
-                      <h6 class="text-sm text-gray-800">
-                        {{ formatRow(row[attribute],attribute) }}
-                      </h6> 
-                    </td>    
                     <td class="p-4">
                       <section class="flex flex-col space-y-1 lg:flex-row lg:space-y-0 lg:space-x-1">
                         <!-- View -->
@@ -37,17 +32,31 @@
                           <ion-icon class="table m-auto" name="trash" v-pre></ion-icon>
                         </div>
                       </section>
-                    </td>  
+                    </td>
+                    <td v-for="(attribute,index) in attributes" :key="index" class="p-4"> 
+                      <h6 class="text-sm text-gray-800">
+                        {{ formatRow(row[attribute],attribute) }}
+                      </h6> 
+                    </td>    
+                      
                   </tr>
                 </transition-group>
               </table>
             </div>
           </div>
+
+          <div class="my-3">
+            <span v-html="paginator"></span>
+          </div>
         </section>
 
         <!-- Side Pop Up -->
-        <section class="bg-green-100 w-3/4 table">
-            test
+        <section class="col-span-3" style="min-height: 70vh">
+            <div class="shadow overflow-hidden border-b border-gray-200 rounded-md h-full">
+
+              <multi-tab></multi-tab>
+              
+            </div>
         </section>
     </div>
     
@@ -61,6 +70,7 @@
 <script>
 import AlertModal from './AlertModal.vue';
 import Notification from './Notification.vue';
+import MultiTab from './MultiTab.vue';
 import axios from 'axios';
 const axiosVerified = axios.create({
   baseURL: 'http://127.0.0.1:8000',
@@ -71,7 +81,8 @@ export default {
   name: "Table",
   components: {
     'alert-modal' : AlertModal,
-    'notification' : Notification
+    'notification' : Notification,
+    'multi-tab' : MultiTab
   },
   data() {
     return {
@@ -121,6 +132,8 @@ export default {
   props: {
     datas: Object,
     attributes: Object,
+    paginator : String,
+    dataName : String
   },
   mounted(){
     this.rows = this.datas;
@@ -129,5 +142,29 @@ export default {
 </script>
 
 <style>
+.table-side-nav-scroll::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
 
+/* Track */
+.table-side-nav-scroll::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+/* Handle */
+.table-side-nav-scroll::-webkit-scrollbar-thumb {
+    background:#999999;
+    border-radius: 6px;
+}
+
+/* Handle on hover */
+.table-side-nav-scroll::-webkit-scrollbar-thumb:hover {
+    background:#666666;
+}
+
+.table-side-nav-scroll::-webkit-scrollbar-thumb:active {
+    background:#333333;
+}
 </style>

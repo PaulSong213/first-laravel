@@ -4,10 +4,9 @@
   <!-- put taost notification in here , to cope when the toast more than one -->
   <!-- class="" For put toast on top right -->
   <div  class="flex flex-col justify-center fixed left-0 bottom-0 m-5 w-60 z-30">.
-
     <!-- Toast Notification Success-->
     <transition-group tag="div" name="slide-left" >
-      <section v-for="(notification, index) in notifications" :key="notification.id" class="border-l-4  pt-3 shadow-md mb-2 transition-all cursor-pointer transform hover:scale-105" @click="stopToast(index)" @mouseenter="pauseTimer(index)" @mouseleave="pauseTimer(index,false)" :class="[ 'bg-' + getNotifStatusColor(notification.status) + '-500', 'border-' + getNotifStatusColor(notification.status) + '-600' ]" >
+      <section v-for="(notification, index) in notifications" :key="notification.id" class="border-l-4  pt-3 shadow-md mb-2 transition-all cursor-pointer transform hover:scale-105" @click="stopToast(notification.id)" @mouseenter="pauseTimer(index)" @mouseleave="pauseTimer(index,false)" :class="[ 'bg-' + getNotifStatusColor(notification.status) + '-500', 'border-' + getNotifStatusColor(notification.status) + '-600' ]" >
       
       <div class="w-full">
         <section class="flex items-center  px-5">
@@ -56,7 +55,7 @@ export default {
       this.notifications[index].timerLineWidth = "decrement-width";
       const idToRemove = this.notifications[index].id;
       this.notifications[index].timeStart = Date.now();
-      this.notifications[index].timer = setTimeout(() => this.stopToast(null,idToRemove) , this.notifications[index].time);
+      this.notifications[index].timer = setTimeout(() => this.stopToast(idToRemove) , this.notifications[index].time);
     },
     startToast(status, message, time = 5000){
       let newNotification = {
@@ -72,13 +71,7 @@ export default {
       const newNotificationIndex = this.notifications.length - 1;
       this.decrementTimer(newNotificationIndex);
     },
-    stopToast(index = null,id = null){
-      if(index){
-        //Stop toast notification by Click
-        this.notifications.splice(index, 1);
-        return;
-      }
-      //Stop toast notification by timer
+    stopToast(id = null){
       for(var i = 0; i < this.notifications.length; i ++){
         if(this.notifications[i].id === id)this.notifications.splice(i, 1);
       }
