@@ -20,7 +20,7 @@
                     <td class="p-4">
                       <section class="flex flex-col space-y-1 lg:flex-row lg:space-y-0 lg:space-x-1">
                         <!-- View -->
-                        <div class="bg-blue-500 hover:bg-blue-600 active:bg-blue-500 text-white hover:shadow-sm transition-all rounded-lg cursor-pointer h-8 w-8 flex opacity-80" @click="deleteEvent('warning')">
+                        <div class="bg-blue-500 hover:bg-blue-600 active:bg-blue-500 text-white hover:shadow-sm transition-all rounded-lg cursor-pointer h-8 w-8 flex opacity-80" @click="addPageToMultiTab('Add new' + dataName , 'bg-indigo-500', 'add') ">
                           <ion-icon class="table m-auto" name="eye" v-pre></ion-icon>
                         </div>
                         <!-- Edit -->
@@ -52,11 +52,7 @@
 
         <!-- Side Pop Up -->
         <section class="col-span-3" style="min-height: 70vh">
-            <div class="shadow overflow-hidden border-b border-gray-200 rounded-md h-full">
-
-              <multi-tab></multi-tab>
-              
-            </div>
+              <multi-tab ref="multiTab" ></multi-tab>
         </section>
     </div>
     
@@ -68,6 +64,8 @@
 </template>
 
 <script>
+import { defineAsyncComponent } from 'vue';
+const AddNewItem = defineAsyncComponent(() =>import('./AddNewItem.vue'));
 import AlertModal from './AlertModal.vue';
 import Notification from './Notification.vue';
 import MultiTab from './MultiTab.vue';
@@ -98,6 +96,16 @@ export default {
     }
   },
   methods:{
+    addPageToMultiTab(title,color,contentName){
+      let content = null;
+      switch (contentName) {
+        case "add":
+          content = AddNewItem;
+          break;
+      }
+
+      this.$refs.multiTab.addPage(title,color,content);
+    },
     formatRow(row,column){
       const dateColumns = ['updated_at','created_at'];
       var isDate = dateColumns.includes(column) && row !== null;

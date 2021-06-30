@@ -3,7 +3,6 @@
     {{title}}
     <div>
       <input type="text" v-model="test">
-      {{test}}
     </div>
   </section>
 </template>
@@ -18,6 +17,9 @@ export default {
   },
   props : {
     title : String
+  },
+  mounted(){
+    console.log('add new');
   }
 }
 </script>

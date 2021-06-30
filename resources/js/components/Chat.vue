@@ -6,6 +6,9 @@
 
 <script>
 export default {
-  name : 'Chat'
+  name : 'Chat',
+  mounted(){
+    console.log('chat');
+  }
 }
 </script>
